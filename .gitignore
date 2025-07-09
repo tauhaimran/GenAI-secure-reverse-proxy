@@ -1,0 +1,19 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Flask static files (if generated dynamically)
+app/static/output/*
+
+# Environment variables
+.env
+
+# Docker stuff (optional)
+*.log
+docker-compose.override.yml
+
+# VS Code or IDE files
+.vscode/
+*.code-workspace
+.idea/
