@@ -6,9 +6,11 @@ services:
     volumes:
       - ./app:/app
     restart: always
+    environment:
+      - .env
 
   nginx:
-    image: nginx:1.25 # safer than 'latest'
+    image: nginx:1.25
     ports:
       - "80:80"
       - "443:443"
