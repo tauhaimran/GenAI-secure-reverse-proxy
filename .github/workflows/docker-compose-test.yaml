@@ -17,14 +17,28 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Build & Run containers
-        run: docker-compose up --build
-
-      - name: Wait for app to be healthy
+      - name: Create self-signed SSL cert (if not in repo)
         run: |
-          sleep 5
+          mkdir -p certs
+          openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+            -keyout certs/selfsigned.key \
+            -out certs/selfsigned.crt \
+            -subj "/CN=localhost"
+
+      - name: Build and start containers
+        run: docker-compose up -d --build
+
+      - name: Wait for services to start
+        run: sleep 10
+
+      - name: Test app from inside nginx container
+        run: |
           docker ps
-          curl -k https://localhost || exit 1
+          docker exec $(docker ps -qf "name=nginx") \
+            curl -k https://localhost
 
       - name: Tear down
         run: docker-compose down
+      
+      - name: Clean up Docker
+        run: docker system prune -f --volumes
