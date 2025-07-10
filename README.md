@@ -8,7 +8,7 @@ A containerized Flask web application that integrates with an external **API**, 
 
 ## 🚀 Live Demo & Blog
 
-- 🌐 **Live App**: [https://genai-proxy.up.railway.app](https://genai-proxy.up.railway.app) *(Hosted on Railway)*
+- 🌐 **Live App**: [https://genai-proxy.up.railway.app](https://genai-proxy.up.railway.app) *(Coming soon - Hosted on Railway)*
 - 📝 **Blog Post**: [How I Built a Secure Reverse Proxy with Nginx, Docker & SSL](#) *(Coming soon)*
 
 ---
@@ -19,11 +19,16 @@ A containerized Flask web application that integrates with an external **API**, 
   <img src="docs/app-demo.jpg" alt="App Screenshot" width="700"/>
 </p>
 
+
+<p align="center">
+  <img src="docs/docker-demo.jpg" alt="App Screenshot" width="700"/>
+</p>
+
 ---
 
 ## 📦 Project Structure
 
-.
+```
 ├── app/ # Flask or backend application
 │ └── ...
 ├── nginx/
@@ -36,10 +41,7 @@ A containerized Flask web application that integrates with an external **API**, 
 ├── docker-compose.yaml # Compose config for web + nginx
 ├── .env # Not included — provide your own API keys
 └── README.md
-
-yaml
-Copy
-Edit
+```
 
 ---
 
@@ -50,7 +52,7 @@ Edit
 - 🌐 **Nginx** – Acts as secure reverse proxy
 - 🔐 **SSL** – Self-signed certs for HTTPS
 - ⚙️ **Docker Compose** – Multi-service orchestration
-- ☁️ **Railway** – Cloud hosting & deployment
+- ☁️ **Railway** – Cloud hosting & deployment (in process)
 
 ---
 
@@ -75,12 +77,16 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -keyout certs/selfsigned.key \
   -out certs/selfsigned.crt \
   -subj "/CN=localhost"
+```
+
 2. Start the app with Docker Compose
-bash
-Copy
-Edit
+
+```
 docker compose up --build
+```
+
 3. Access locally
+
 Visit: http://localhost → redirects to
 
 Secure: https://localhost
@@ -88,23 +94,22 @@ Secure: https://localhost
 Expect a browser warning for the self-signed cert — it's safe to continue.
 
 🧪 Testing via Curl
-bash
-Copy
-Edit
+```
 curl -k https://localhost
+```
 The -k option skips SSL verification (needed for self-signed certs).
 
 🗂️ .env Support
 Add your API keys or configs inside a .env file in the root (not committed).
-Example:
+Example (.env file) :
 
-ini
-Copy
-Edit
+```
 API_KEY=your_api_key_here
 FLASK_ENV=development
+```
+
 📄 License
-This project is open-source and available under the MIT License.
+n/a
 
 🙋‍♂️ Author
 Built by Tauha Imran
