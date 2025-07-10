@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   web:
@@ -10,6 +10,8 @@ services:
     volumes:
       - ./app:/app
     restart: always
+    networks:
+      - webnet
 
   nginx:
     image: nginx:1.25
@@ -22,3 +24,9 @@ services:
     depends_on:
       - web
     restart: always
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    #driver: bridge
