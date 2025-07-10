@@ -25,6 +25,9 @@ jobs:
             -out certs/selfsigned.crt \
             -subj "/CN=localhost"
 
+      - name: Create dummy .env
+        run: echo "DUMMY_VAR=1" > .env
+
       - name: Build and start containers
         run: docker compose up -d --build
 
