@@ -1,45 +1,41 @@
-# app/app.py
+from flask import Flask, render_template, request
+import google.generativeai as genai
+from dotenv import load_dotenv
 import os
-import requests
-from flask import Flask, render_template, request, send_from_directory
-from io import BytesIO
+
+load_dotenv()
+
+# Configure Gemini
+api_key = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=api_key)
+print(f"Using Gemini API key: {api_key}")
+
+
+models = genai.list_models()
+for m in models:
+    print(m.name, "-", m.supported_generation_methods)
+
+# Load model
+model = genai.GenerativeModel("models/gemini-1.5-pro-latest")
 
 app = Flask(__name__)
 
-# Environment token (store this securely IRL)
-HF_TOKEN = os.environ.get("HF_TOKEN")
-
-# HF API endpoints
-IMG_API = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
-TTS_API = "https://api-inference.huggingface.co/models/coqui/tts_en_ljspeech"
-
-HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"}
-
-
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
+    result = None
+    error = None
 
+    if request.method == "POST":
+        try:
+            prompt = request.form.get("input_value", "")
+            response = model.generate_content(prompt)
+            result = response.text
+        except Exception as e:
+            error = str(e)
 
-@app.route("/generate-image", methods=["POST"])
-def generate_image():
-    prompt = request.form.get("prompt")
-    res = requests.post(IMG_API, headers=HEADERS, json={"inputs": prompt})
-    img_path = os.path.join("static", "output", "generated.png")
-    with open(img_path, "wb") as f:
-        f.write(res.content)
-    return render_template("index.html", image_url="/static/output/generated.png")
-
-
-@app.route("/generate-voice", methods=["POST"])
-def generate_voice():
-    text = request.form.get("text")
-    res = requests.post(TTS_API, headers=HEADERS, json={"inputs": text})
-    audio_path = os.path.join("static", "output", "speech.wav")
-    with open(audio_path, "wb") as f:
-        f.write(res.content)
-    return render_template("index.html", audio_url="/static/output/speech.wav")
-
+    return render_template("index.html", result=result, error=error)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)
+# This is the main entry point for the Flask application.
+# It initializes the app, configures the Gemini API, and defines the main route.

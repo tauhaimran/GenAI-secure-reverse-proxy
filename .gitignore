@@ -17,3 +17,7 @@ docker-compose.override.yml
 .vscode/
 *.code-workspace
 .idea/
+
+
+#testing files# Test output files
+test_api.py

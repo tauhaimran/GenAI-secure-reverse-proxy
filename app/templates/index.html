@@ -1,35 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>GenAI: Image & Voice Generator</title>
+    <title>Gemini Flask Chat</title>
 </head>
 <body>
-  <h1>🎨 Generate Image</h1>
-  <form action="/generate-image" method="post">
-    <input type="text" name="prompt" placeholder="Enter prompt for image">
-    <button type="submit">Generate Image</button>
-  </form>
+    <h1>🔮 Ask Gemini AI</h1>
+    <form method="POST">
+        <input type="text" name="input_value" placeholder="Ask me anything..." required>
+        <button type="submit">Send</button>
+    </form>
 
-  {% if image_url %}
-    <h3>Generated Image:</h3>
-    <img src="{{ image_url }}" width="400">
-  {% endif %}
+    {% if result %}
+    <h2>🧠 Gemini says:</h2>
+    <p>{{ result }}</p>
+    {% endif %}
 
-  <hr>
-
-  <h1>🗣️ Generate Voice</h1>
-  <form action="/generate-voice" method="post">
-    <input type="text" name="text" placeholder="Enter text to speak">
-    <button type="submit">Generate Voice</button>
-  </form>
-
-  {% if audio_url %}
-    <h3>Generated Voice:</h3>
-    <audio controls>
-      <source src="{{ audio_url }}" type="audio/wav">
-      Your browser does not support the audio tag.
-    </audio>
-  {% endif %}
+    {% if error %}
+    <h2>⚠️ Error</h2>
+    <pre>{{ error }}</pre>
+    {% endif %}
 </body>
 </html>
+<!-- This is the main HTML template for the Gemini Flask Chat application.
+     It includes a form for user input and displays the response from Gemini AI. -->

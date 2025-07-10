@@ -4,9 +4,10 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install flask
-RUN pip install requests
+# Install dependencies
+RUN pip install --no-cache-dir flask python-dotenv google-generativeai
 
 CMD ["python", "app.py"]
-# Expose port 5000 for the Flask app
+
+# Expose the port the app runs on
 EXPOSE 5000
