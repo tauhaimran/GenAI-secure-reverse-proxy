@@ -1,13 +1,15 @@
+version: '3.8'
+
 services:
   web:
     build: ./app
     ports:
       - "5000:5000"
+    env_file:
+      - .env
     volumes:
       - ./app:/app
     restart: always
-    environment:
-      - .env
 
   nginx:
     image: nginx:1.25

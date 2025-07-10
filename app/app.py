@@ -1,45 +1,41 @@
 # app/app.py
 import os
 import requests
-from flask import Flask, render_template, request, send_from_directory
-from io import BytesIO
+import markdown
+from flask import Flask, render_template, request
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+load_dotenv()
 
-# Environment token (store this securely IRL)
-HF_TOKEN = os.environ.get("HF_TOKEN")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent"
 
-# HF API endpoints
-IMG_API = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
-TTS_API = "https://api-inference.huggingface.co/models/coqui/tts_en_ljspeech"
-
-HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"}
-
-
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
+    response_html = None
+    error = None
 
+    if request.method == "POST":
+        user_input = request.form.get("prompt")
+        headers = {"Content-Type": "application/json"}
+        payload = {
+            "contents": [{"parts": [{"text": user_input}]}]
+        }
+        url = f"{GEMINI_API_URL}?key={GEMINI_API_KEY}"
+        
+        try:
+            res = requests.post(url, headers=headers, json=payload)
+            if res.status_code == 200:
+                raw_text = res.json()["candidates"][0]["content"]["parts"][0]["text"]
+                response_html = markdown.markdown(raw_text)
+            else:
+                error = f"Error {res.status_code}: {res.text}"
+        except Exception as e:
+            error = str(e)
 
-@app.route("/generate-image", methods=["POST"])
-def generate_image():
-    prompt = request.form.get("prompt")
-    res = requests.post(IMG_API, headers=HEADERS, json={"inputs": prompt})
-    img_path = os.path.join("static", "output", "generated.png")
-    with open(img_path, "wb") as f:
-        f.write(res.content)
-    return render_template("index.html", image_url="/static/output/generated.png")
-
-
-@app.route("/generate-voice", methods=["POST"])
-def generate_voice():
-    text = request.form.get("text")
-    res = requests.post(TTS_API, headers=HEADERS, json={"inputs": text})
-    audio_path = os.path.join("static", "output", "speech.wav")
-    with open(audio_path, "wb") as f:
-        f.write(res.content)
-    return render_template("index.html", audio_url="/static/output/speech.wav")
-
+    return render_template("index.html", result=response_html, error=error)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)
+# app/templates/index.html
