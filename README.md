@@ -9,7 +9,7 @@ A containerized Flask web application that integrates with an external **API**, 
 ## 🚀 Live Demo & Blog
 
 - 🌐 **Live App**: [https://genai-proxy.up.railway.app](https://genai-proxy.up.railway.app) *(Coming soon - Hosted on Railway)*
-- 📝 **Blog Post**: [How I Built a Secure Reverse Proxy with Nginx, Docker & SSL](#) *(Coming soon)*
+- 📝 **Blog Post**: [How I Built a Secure Reverse Proxy with Nginx, Docker & SSL](https://www.linkedin.com/posts/tauha-imran-6185b3280_devops-docker-flask-activity-7349143758220791809-TiTN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAERujrQBDz_-twYMisiFReEvfdGkbhb4KpM) *(Coming soon)*
 
 ---
 
