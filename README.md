@@ -21,7 +21,7 @@ A containerized Flask web application that integrates with an external **API**, 
 
 
 <p align="center">
-  <img src="docs/docker-demo.jpg" alt="App Screenshot" width="700"/>
+  <img src="docs/docker_demo.jpg" alt="App Screenshot" width="700"/>
 </p>
 
 ---
